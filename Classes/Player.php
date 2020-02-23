@@ -53,7 +53,7 @@ class Player
   }
   public function set($name, $height, $team_id, $number, $position_id, $category_id, $year, $sex, $id)
   {
-    $query = $this->conn->prepare("INSERT INTO `player` VALUES (:id, :name, :height, :team_id, :number, :position_id, :category_id, :year, :sex, NULL);");
+    $query = $this->conn->prepare("INSERT INTO `player` VALUES (:id, :name, :height, :team_id, :number, :position_id, :category_id, :year, :sex);");
     $query->bindValue(':id', $id);
     $query->bindValue(':name', $name);
     $query->bindValue(':height', $height);
@@ -80,22 +80,7 @@ class Player
       return false;
     }
   }
-  public function setImage($player_id, $directory)
-  {
-    $query = $this->conn->prepare("UPDATE `player` SET `directory` = :directory WHERE `player`.`playerid` = :id;");
-    $query->bindValue('directory', $directory);
-    $query->bindValue('id', $player_id);
-    $query->execute();
-    header('Location: player_profile.php?player=' . $player_id);
-  }
-  public function getImage($player_id)
-  {
-    $query = $this->conn->prepare("SELECT `directory` FROM `player` WHERE `player`.`playerid` = :id");
-    $query->bindValue('id', $player_id);
-    if ($query->execute()) {
-      return $query->fetch(PDO::FETCH_OBJ);
-    }
-  }
+
   public function getId($playerid)
   {
     $query = $this->conn->prepare("SELECT * FROM ((((player

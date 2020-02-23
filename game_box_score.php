@@ -29,16 +29,6 @@ if (empty($game)) {
   <h3><b>Score:</b> <?= $game['home_score'] ?> x <?= $game['away_score'] ?></h3>
   <hr>
   <h3><b>Game Date:</b> <?= $game['date'] ?></h3>
-  <?php if (isset($_SESSION["status"]) && $_SESSION["status"] != 0) : ?>
-    <hr>
-    <a class="btn btn-primary" href="games_form.php?gameid=<?= $game['gameid'] ?>">Edit</a></td>
-    <hr>
-    <form action="games_delete.php" method="post">
-      <input type="hidden" name="game_id" value="<?= $game['gameid'] ?>">
-      <button class="btn-danger">Delete</i></button>
-    </form>
-    <hr>
-  <?php endif ?>
 </div>
 
 <div class="stat_player_intro">
@@ -85,7 +75,7 @@ if (empty($game)) {
                   $tg = ($stat['3pm'] / $stat['3pa']) * 100;
                   $ft = ($stat['ftm'] / $stat['fta']) * 100;
 
-                  ?>
+            ?>
                   <tr>
                     <th scope="row"><?= $stat['playerid'] ?></th>
                     <th scope="row"><a class="links" href="player_profile.php?player=<?= $stat['playerid'] ?>"><?= $stat['name'] ?></a></th>
@@ -107,16 +97,7 @@ if (empty($game)) {
                     <td><?= round($stat['steals'], 2) ?></td>
                     <td><?= round($stat['blocks'], 2) ?></td>
                     <td><?= round($stat['turnovers'], 2) ?></td>
-                    <?php if (isset($_SESSION) && $_SESSION["status"] != 0) : ?>
-                      <td><a class="btn btn-primary" href="stats_form.php?statid=<?= $stat['statsid'] ?>">Edit</i></a></td>
-                      <td>
-                        <form action="stats_delete.php" method="post">
-                          <input type="hidden" name="stats_id" value="<?= $stat['statsid'] ?>">
-                          <button class="btn-danger">Delete</button>
-                        </form>
-                      </td>
-                  <?php endif;
-                      } ?>
+                  <?php } ?>
                   </tr>
                 <?php } ?>
               <?php } ?>
@@ -171,7 +152,7 @@ if (empty($game)) {
                   $tg = ($stat['3pm'] / $stat['3pa']) * 100;
                   $ft = ($stat['ftm'] / $stat['fta']) * 100;
 
-                  ?>
+            ?>
                   <tr>
                     <th scope="row"><?= $stat['playerid'] ?></th>
                     <th scope="row"><a class="links" href="player_profile.php?player=<?= $stat['playerid'] ?>"><?= $stat['name'] ?></a></th>
@@ -193,16 +174,8 @@ if (empty($game)) {
                     <td><?= round($stat['steals'], 2) ?></td>
                     <td><?= round($stat['blocks'], 2) ?></td>
                     <td><?= round($stat['turnovers'], 2) ?></td>
-                    <?php if (isset($_SESSION) && $_SESSION["status"] != 0) : ?>
-                      <td><a class="btn btn-primary" href="stats_form.php?statid=<?= $stat['statsid'] ?>">Edit</i></a></td>
-                      <td>
-                        <form action="stats_delete.php" method="post">
-                          <input type="hidden" name="stats_id" value="<?= $stat['statsid'] ?>">
-                          <button class="btn-danger">Delete</button>
-                        </form>
-                      </td>
-                  <?php endif;
-                      } ?>
+                    </td>
+                  <?php } ?>
                   </tr>
                 <?php } ?>
               <?php } ?>

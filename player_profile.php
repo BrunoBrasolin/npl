@@ -13,7 +13,6 @@ if (!isset($_GET["player"])) {
 $player_id = $_GET['player'];
 try {
   $stats = $Player->getStat($player_id);
-  $image = $Player->getImage($player_id);
   $player = $Player->getId($player_id);
   $players = $Player->get();
   $teams = $Team->get();
@@ -31,13 +30,6 @@ if (empty($player)) {
   <hr>
   <h3><b>Name:</b> <?= $player['name'] ?></h3>
   <hr>
-  <?php if ($image->directory != NULL) { ?>
-    <img id="img-profile" style="max-height: 500px;" src="<?= $image->directory ?>" alt="<?= $player['name'] ?> Profile photo">
-    <hr>
-  <?php } else { ?>
-    <h4>Click <a data-toggle="modal" data-target="#add_image" class="links" href="#">Here</a> to add a Profile Photo</h4>
-    <hr>
-  <?php } ?>
   <b>Team:</b>
   <?= $player['team'] ?>
   <hr>

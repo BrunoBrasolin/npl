@@ -1,4 +1,5 @@
 <?php
+
 namespace Classes;
 
 use Classes\Connection;
@@ -79,7 +80,20 @@ class Game
   }
   public function edit($gameid, $home_team_id, $away_team_id, $home_score, $away_score, $date)
   {
-    $query = $this->conn->prepare("UPDATE `game` SET `home_team_id` = :home_team_id,`away_team_id` = :away_team_id, `home_score` = :home_score,`away_score` = :away_score, `date` = :date WHERE `game`.`gameid` = :id;");
+    $game = $this->getId($gameid);
+    if ($home_score > $away_score && $game['home_score'] < $game['away_score']) {
+      $query2 = $this->conn->prepare("UPDATE `team` SET `wins` = `wins` + 1 WHERE `team`.`id` = $home_team_id");
+      $query4 = $this->conn->prepare("UPDATE `team` SET `losses` = `losses` - 1 WHERE `team`.`id` = $home_team_id");
+      $query3 = $this->conn->prepare("UPDATE `team` SET `wins` = `wins` - 1 WHERE `team`.`id` = $away_team_id");
+      $query5 = $this->conn->prepare("UPDATE `team` SET `losses` = `losses` + 1 WHERE `team`.`id` = $away_team_id");
+    }
+    if ($away_score > $home_score && $game['away_score'] < $game['home_score']) {
+      $query2 = $this->conn->prepare("UPDATE `team` SET `wins` = `wins` + 1 WHERE `team`.`id` = $away_team_id");
+      $query4 = $this->conn->prepare("UPDATE `team` SET `losses` = `losses` - 1 WHERE `team`.`id` = $away_team_id");
+      $query3 = $this->conn->prepare("UPDATE `team` SET `wins` = `wins` - 1 WHERE `team`.`id` = $home_team_id");
+      $query5 = $this->conn->prepare("UPDATE `team` SET `losses` = `losses` + 1 WHERE `team`.`id` = $home_team_id");
+    }
+    $query = $this->conn->prepare("UPDATE `game` SET `home_team_id` = :home_team_id, `away_team_id` = :away_team_id, `home_score` = :home_score,`away_score` = :away_score, `date` = :date WHERE `game`.`gameid` = :id;");
     $query->bindValue(':id', $gameid);
     $query->bindValue(':home_team_id', $home_team_id);
     $query->bindValue(':away_team_id', $away_team_id);
@@ -87,6 +101,10 @@ class Game
     $query->bindValue(':away_score', $away_score);
     $query->bindValue(':date', $date);
     $query->execute();
+    $query2->execute();
+    $query3->execute();
+    $query4->execute();
+    $query5->execute();
   }
   public function getStat($game_id)
   {
@@ -101,8 +119,19 @@ class Game
   }
   public function remove($game_id)
   {
+    $game = $this->getId($game_id);
+    $home_team_id = $game['home_team_id'];
+    $away_team_id = $game['away_team_id'];
+    if ($game['home_score'] > $game['away_score'])
+      $query2 = $this->conn->prepare("UPDATE `team` SET `wins` = `wins` - 1 WHERE `team`.`id` = $home_team_id");
+      $query3 = $this->conn->prepare("UPDATE `team` SET `losses` = `losses` - 1 WHERE `team`.`id` = $away_team_id");
+    if ($game['away_score'] > $game['home_score'])
+      $query2 = $this->conn->prepare("UPDATE `team` SET `wins` = `wins` - 1 WHERE `team`.`id` = $away_team_id");
+      $query3 = $this->conn->prepare("UPDATE `team` SET `losses` = `losses` - 1 WHERE `team`.`id` = $home_team_id");
     $query = $this->conn->prepare("DELETE FROM `game` WHERE `game`.`gameid` = :game_id");
     $query->bindValue(':game_id', $game_id);
     $query->execute();
+    $query2->execute();
+    $query3->execute();
   }
 }
